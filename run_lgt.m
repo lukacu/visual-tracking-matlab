@@ -15,7 +15,7 @@ for i = 1:numel(includes)
     addpath(includes{i});
 end;
 
-if varargin < 1
+if nargin < 1
     if exist('traxserver') ~= 3
 		    error('Traxserver MEX file not found!');
     end
