@@ -1,6 +1,6 @@
 function trax(tracker, format, varargin)
 
-cleanup = onCleanup(@() exit() );
+%cleanup = onCleanup(@() exit() );
 
 RandStream.setGlobalStream(RandStream('mt19937ar', 'Seed', sum(clock)));
 
@@ -8,7 +8,7 @@ if nargin == 1
 	format = 'rectangle';
 end
 
-traxserver('setup', format, 'path');
+traxserver('setup', format, {'path', 'memory', 'data'});
 
 tracker_initialize = str2func(['tracker_', tracker, '_initialize']);
 tracker_update = str2func(['tracker_', tracker, '_update']);
@@ -21,7 +21,7 @@ try
 
         [image, region, parameters] = traxserver('wait');
 
-        if isempty(image) 
+        if isempty(image)
             break;
         end;
 
@@ -30,18 +30,27 @@ try
         if ~isempty(parameters) && iscell(parameters)
             args{1} = 'parameters';
             args{2} = cell2struct(parameters);
-        end;    
+        end;
 
-        I = imread(image);
+		if ischar(image)
+        	I = imread(image);
+		elseif isa(image,'uint8')
+			I = image;
+		elseif isstruct(image)
+			I = cv.imdecode(image.data, 'Color', true);
+		else
+			error('Invalid image type');
+		end;
 
-        if isempty(region) 
+
+        if isempty(region)
             if isempty(state)
                 break;
             end;
 
             [state, location, values] = tracker_update(state, I, args{:});
 
-        else 
+        else
 
             [state, location, values] = tracker_initialize(I, region, args{:});
 
@@ -53,7 +62,7 @@ try
         end;
 
         location = location(:)';
-        
+
         if (isstruct(values))
             traxserver('status', location, values);
         else
@@ -65,7 +74,7 @@ catch err
     disp(getReport(err,'extended'));
 end
 
-end 
+end
 
 function [S] = cell2struct(A)
 
@@ -73,12 +82,12 @@ function [S] = cell2struct(A)
 
     S = struct();
 
-    if ~iscell(A) || V ~= 2 || N < 1   
+    if ~iscell(A) || V ~= 2 || N < 1
         return;
     end;
- 
+
     for i = 1:N
-        try 
+        try
             if isnan(str2double(A{i, 2}))
                 eval(sprintf('S.%s = ''%s'';', A{i, 1}, A{i, 2}));
             else
