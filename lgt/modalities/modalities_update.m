@@ -226,30 +226,35 @@ function [motion] = update_motion(motion, context)
     corners = ((ordfilt2(corners, radius * radius, true(radius))) == corners) & (corners > eps) & bordermask;
     
     [y, x] = find(corners);
-    
-    positions_origin = [x, y];
 
-    [positions_flow, status] = cv.calcOpticalFlowPyrLK(gray2, gray1, num2cell(positions_origin, 2), 'WinSize', [motion.parameters.lk_size, motion.parameters.lk_size]);
-    positions_flow = reshape(cell2mat(positions_flow), 2, size(positions_origin, 1))';
+    if ~isempty(y)
+        
+        positions_origin = [x, y];
 
-    flow = positions_flow - positions_origin;
+        [positions_flow, status] = cv.calcOpticalFlowPyrLK(gray2, gray1, num2cell(positions_origin, 2), 'WinSize', [motion.parameters.lk_size, motion.parameters.lk_size]);
+        positions_flow = reshape(cell2mat(positions_flow), 2, size(positions_origin, 1))';
 
-    similarity = exp(-sqrt(sum(flow .^ 2, 2)) .* motion.parameters.damping);
+        flow = positions_flow - positions_origin;
 
-    result = zeros(size(gray1)); 
-    similarity(~status) = 0;
+        similarity = exp(-sqrt(sum(flow .^ 2, 2)) .* motion.parameters.damping);
 
-    result(corners > 0) = similarity;
+        result = zeros(size(gray1)); 
+        similarity(~status) = 0;
 
-    result = conv2(result, gauss_kernel(eye(2) * 90), 'same');
-    result = normalize(result)  .* 0.99 + 0.01 * 1 / numel(result); % A very small uniform component
+        result(corners > 0) = similarity;
 
-    if (isempty(motion.map))
-        motion.map = ones(size(result));
-    end;
+        result = conv2(result, gauss_kernel(eye(2) * 90), 'same');
+        result = normalize(result)  .* 0.99 + 0.01 * 1 / numel(result); % A very small uniform component
 
+        if (isempty(motion.map))
+            motion.map = ones(size(result));
+        end;
+
+    else
+        motion.map = ones(context.map_size);
+    end
+       
     motion.map = motion.parameters.persistence * motion.map + ((1 - motion.parameters.persistence) * result);
-
     motion.map = normalize(motion.map);
 
     motion.previous_position = context.position;

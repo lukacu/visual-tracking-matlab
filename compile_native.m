@@ -13,6 +13,9 @@ success = compile_mex('partcompare', {fullfile(dest, 'partcompare.cpp')}, {dest}
 dest = fullfile(dir, 'ant', 'memory');
 success = compile_mex('gradients', {fullfile(dest, 'gradients.cpp')}, {dest}, dest) & success;
 
+dest = fullfile(dir, 'ivt');
+success = compile_mex('interp2', {fullfile(dest, 'interp2.cpp')}, {dest}, dest) & success;
+
 if ~success
 	error('Unable to compile MEX files');
 end

@@ -10,13 +10,13 @@ on several modern benchmarks.
 Citing
 ------
 
-If you use the LGT part of this code in an academic paper you have to refer to 
+If you use the LGT algorithm in an academic paper, please refer to
 it by citing the following paper:
 
 ```
 @article {cehovin2013tpami,
 	author = {Luka \v{C}ehovin and Matej Kristan and Ale\v{s} Leonardis},
-	journal = {Pattern Analysis and Machine Intelligence, IEEE Transactions on}, 
+	journal = {Pattern Analysis and Machine Intelligence, IEEE Transactions on},
 	title = {Robust Visual Tracking using an Adaptive Coupled-layer Visual Model},
 	year = {2013},
 	doi = {10.1109/TPAMI.2012.145},
@@ -24,6 +24,6 @@ it by citing the following paper:
 	month = {April},
 	volume = {35},
 	number = {4},
-	pages = {941-953}, 
+	pages = {941-953},
 }
 ```
