@@ -1,9 +1,9 @@
-function run_ivt(directory)
+function run_meem(directory)
 
 root_directory = fileparts(mfilename('fullpath'));
 
 includes = {fullfile(root_directory, 'common'), ...
-    fullfile(root_directory, 'ivt')
+    fullfile(root_directory, 'meem')
 };
 
 for i = 1:numel(includes)
@@ -14,8 +14,8 @@ if nargin < 1
     if exist('traxserver') ~= 3
 		    error('Traxserver MEX file not found!');
     end
-    trax('ivt', 'rectangle');
+    trax('meem', 'rectangle');
 else
     [sequence, region] = scan_directory(directory);
-    track('ivt', sequence, region);
+    track('meem', sequence, region);
 end;

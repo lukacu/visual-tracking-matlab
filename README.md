@@ -10,6 +10,7 @@ Release log (major changes)
 
  * 23-02-2016 - Initial public release, [ANT](ant/README.md) and [LGT](lgt/README.md) trackers
  * 28-10-2016 - Adding adapted original implementation of the [IVT](ivt/README.md) tracker
+ * 03-11-2016 - Adding adapted original implementation of the [MEEM](meem/README.md) and [L1-APG](l1apg/README.md) trackers as well as some fixes
 
 Citing and license
 ------------------

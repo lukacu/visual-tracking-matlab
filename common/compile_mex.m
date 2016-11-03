@@ -1,4 +1,25 @@
-function [success] = compile_mex(name, files, includes, directory)
+function [success] = compile_mex(name, files, varargin)
+
+    directory = pwd;
+    includes = {};
+    linkdirs = {};
+    libraries = {};
+
+    for i = 1:2:length(varargin)
+        switch lower(varargin{i})
+            case 'directory'
+                directory = varargin{i+1};
+            case 'includes'
+                includes = varargin{i+1};
+            case 'linkdirs'
+                linkdirs = varargin{i+1};                
+            case 'libraries'
+                libraries = varargin{i+1};
+            otherwise
+                error(['Unknown switch ', varargin{i},'!']) ;
+        end
+    end
+
 
     function datenum = file_timestamp(filename)
         if ~exist(filename, 'file')
@@ -9,9 +30,11 @@ function [success] = compile_mex(name, files, includes, directory)
         datenum = file_description.datenum;
     end
 
-    if exist(name, 'file') == 3
+    mexname = fullfile(directory, [name, '.', mexext]);
 
-        function_timestamp = file_timestamp(which(name));
+    if exist(mexname, 'file') > 1
+
+        function_timestamp = file_timestamp(mexname);
 
         older = cellfun(@(x) file_timestamp(x) < function_timestamp, files, 'UniformOutput', true);
 
@@ -34,6 +57,10 @@ function [success] = compile_mex(name, files, includes, directory)
 
     includes = cellfun(@(x) sprintf('-I%s', x), includes, 'UniformOutput', false);
 
+    linkdirs = cellfun(@(x) sprintf('-L%s', x), linkdirs, 'UniformOutput', false);
+
+    libraries = cellfun(@(x) sprintf('-l%s', x), libraries, 'UniformOutput', false);
+    
     old_dir = pwd;
 
     try
@@ -44,11 +71,11 @@ function [success] = compile_mex(name, files, includes, directory)
 
         if is_octave() 
 
-            mkoctfile('-mex', '-o', name, includes{:}, files{:}, arguments{:});
+            mkoctfile('-mex', '-o', name, includes{:}, linkdirs{:}, libraries{:}, files{:}, arguments{:});
 
         else
 
-            mex('-output', name, includes{:}, files{:}, arguments{:});
+            mex('-output', name, includes{:}, linkdirs{:}, libraries{:}, files{:}, arguments{:});
 
         end
 
