@@ -246,13 +246,13 @@ function [motion] = update_motion(motion, context)
         result = conv2(result, gauss_kernel(eye(2) * 90), 'same');
         result = normalize(result)  .* 0.99 + 0.01 * 1 / numel(result); % A very small uniform component
 
-        if (isempty(motion.map))
-            motion.map = ones(size(result));
-        end;
-
     else
         result = ones(context.map_size);
     end
+
+    if (isempty(motion.map))
+        motion.map = ones(size(result));
+    end;
 
     motion.map = motion.parameters.persistence * motion.map + ((1 - motion.parameters.persistence) * result);
     motion.map = normalize(motion.map);
