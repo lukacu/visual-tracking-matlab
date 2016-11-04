@@ -16,7 +16,7 @@ function q = affparam2geom(p)
 % Copyright (C) Jongwoo Lim and David Ross.  All rights reserved.
 
 A = [ p(3), p(4); p(5), p(6) ];
-%%  A = USVt = (UVt)(VSVt) = R(th)R(-phi)SR(phi)
+%  A = USVt = (UVt)(VSVt) = R(th)R(-phi)SR(phi)
 [U,S,V] = svd(A);
 if (det(U) < 0)
   U = U(:,2:-1:1);  V = V(:,2:-1:1);  S = S(2:-1:1,2:-1:1);

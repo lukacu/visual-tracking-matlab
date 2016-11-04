@@ -7,7 +7,7 @@ defaults.angle_threshold = 40;
 defaults.Lip	= 8;
 defaults.Maxit	= 5;
 defaults.nT		= 10;%number of templates for the sparse representation
-defaults.rel_std_afnv = [0.03,0.0005,0.0005,0.03,1,1];%diviation of the sampling of particle filter
+defaults.rel_std_afnv = [0.03,0.0005,0.0005,0.03,1,1]; % deviation of the sampling of particle filter
 defaults.n_sample	= 600;		%number of particles
 defaults.sz_T		= [12,15];
 

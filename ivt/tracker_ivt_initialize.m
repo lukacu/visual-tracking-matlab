@@ -1,10 +1,12 @@
 function [state, location, values] = tracker_ivt_initialize(image, region, varargin)
 
 bbox = region; % region([2 1 4 3]);
+
+% TODO: use polygon instead of rectangle
 p = [bbox(1) + bbox(3) / 2, bbox(2) + bbox(4) / 2, bbox(3), bbox(4), 0];
 
-%opt = struct('numsample',2000, 'condenssig',0.25, 'ff',1, 'batchsize',5, 'affsig',[9,9,.01,.01,.001,.001],'dump', 0);
-state.opt = struct('numsample',600, 'condenssig',0.2, 'ff',.95, 'batchsize',5, 'affsig',[4,4,.01,.01,.002,.001]);
+% TODO: parameters merging
+state.opt = struct('numsample',600, 'condenssig', 0.2, 'ff', .95, 'batchsize',5, 'affsig',[4,4,.01,.01,.002,.001]);
 
 state.param0 = [p(1), p(2), p(3)/32, p(5), p(4)/p(3), 0];
 state.param0 = affparam2mat(state.param0);
