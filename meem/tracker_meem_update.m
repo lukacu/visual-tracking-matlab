@@ -3,16 +3,16 @@ function [state, location, values] = tracker_meem_update(state, image, varargin)
     values = struct();
 
     state.time = state.time + 1;
-    
-	[frame, ~] = image_convert(image_create(image), 'rgb');
+
+	[I_scale, ~] = image_convert(image_create(image), 'rgb');
 
     % compute ROI and scale image
     if state.config.image_scale ~= 1
-        I_scale = cv.resize(frame, state.config.image_scale, state.config.image_scale);
+        I_scale = cv.resize(I_scale, state.config.image_scale, state.config.image_scale);
     end
 
     if state.config.padding > 0
-        I_scale = padarray(frame, [state.config.padding, state.config.padding], 'replicate');
+        I_scale = padarray(I_scale, [state.config.padding, state.config.padding], 'replicate');
     end
 
     state.sampler.roi = rsz_rt(state.output, size(I_scale), state.config.search_roi, true);

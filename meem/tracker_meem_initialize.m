@@ -83,13 +83,15 @@ state.svm_tracker.output_exp = state.svm_tracker.output;
 
 state.output = state.svm_tracker.output;
 
+I_scale = frame;
+
 % compute ROI and scale image
 if state.config.image_scale ~= 1
-    I_scale = cv.resize(frame, state.config.image_scale, state.config.image_scale);
+    I_scale = cv.resize(I_scale, state.config.image_scale, state.config.image_scale);
 end
 
 if state.config.padding > 0
-    I_scale = padarray(frame, [state.config.padding, state.config.padding], 'replicate');
+    I_scale = padarray(I_scale, [state.config.padding, state.config.padding], 'replicate');
 end
 
 state.sampler.roi = rsz_rt(state.svm_tracker.output, size(I_scale), 5 * state.config.search_roi, false);
