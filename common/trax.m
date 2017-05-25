@@ -8,7 +8,7 @@ if nargin == 1
 	format = 'rectangle';
 end
 
-traxserver('setup', format, {'path', 'memory', 'data'});
+traxserver('setup', format, {'path', 'memory', 'buffer'});
 
 tracker_initialize = str2func(['tracker_', tracker, '_initialize']);
 tracker_update = str2func(['tracker_', tracker, '_update']);
