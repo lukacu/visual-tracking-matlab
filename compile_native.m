@@ -1,6 +1,6 @@
 function compile_native(varargin)
 
-ocvdir = '';
+ocvdir = '/usr';
 mcvdir = fileparts(fileparts(which('cv.resize')));
 
 for i = 1:2:length(varargin)
@@ -14,7 +14,7 @@ for i = 1:2:length(varargin)
     end
 end
 
-mcvincludes = fullfile(mcvdir, 'includes');
+mcvincludes = fullfile(mcvdir, 'include');
 mcvlibs = fullfile(mcvdir, 'lib');
 dir = fileparts(mfilename('fullpath'));
 
