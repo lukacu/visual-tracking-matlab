@@ -222,7 +222,20 @@ function [motion] = update_motion(motion, context)
     bordermask = false(size(gray2));
     bordermask(radius+1:end-radius, radius+1:end-radius) = 1;
 
-    corners = cv.cornerHarris(gray2, 'KSize', 1); % OpenCV 2.4 : AppertureSize
+    if (~isfield(motion, 'mexopencv'))
+        try
+            corners = cv.cornerHarris(gray2, 'KSize', 1); % OpenCV 2.4 : AppertureSize
+            motion.mexopencv = 3;
+        catch
+            corners = cv.cornerHarris(gray2, 'AppertureSize', 1);
+            motion.mexopencv = 2;
+        end
+    elseif motion.mexopencv == 2
+        corners = cv.cornerHarris(gray2, 'AppertureSize', 1);
+    else
+        corners = cv.cornerHarris(gray2, 'KSize', 1);
+    end
+
     corners = ((ordfilt2(corners, radius * radius, true(radius))) == corners) & (corners > eps) & bordermask;
 
     [y, x] = find(corners);
