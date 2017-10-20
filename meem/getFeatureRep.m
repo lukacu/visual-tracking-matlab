@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %	Implemetation of the tracker described in paper
-%	"MEEM: Robust Tracking via Multiple Experts using Entropy Minimization", 
+%	"MEEM: Robust Tracking via Multiple Experts using Entropy Minimization",
 %   Jianming Zhang, Shugao Ma, Stan Sclaroff, ECCV, 2014
-%	
+%
 %	Copyright (C) 2014 Jianming Zhang
 %
 %	This program is free software: you can redistribute it and/or modify
@@ -39,6 +39,9 @@ if mod(ksize,2) == 0
 end
 if config.use_iif
     F{1} = 255 - calcIIF(I(:,:,1),[ksize ksize],config.hist_nbin)';%IIF2(I(:,:,1)*255, hist_mtx1, nbin);%feature by pixel ordering
+    if any(size(F{1}) ~= size(I(:,:, 1)))
+        F{1} = F{1}';
+    end
 else
     F{1} = uint8(zeros([size(I,1),size(I,2)]));
 end
@@ -49,7 +52,7 @@ if config.use_color
 end
 
 if config.use_raw_feat
-    feat = double(reshape(cell2mat(F),size(F{1},1),size(F{1},2),[]))/255;    
+    feat = double(reshape(cell2mat(F),size(F{1},1),size(F{1},2),[]))/255;
 else
     if ~config.use_color
         feat = zeros([size(I(:,:,1)),2*config.fd]);
@@ -58,7 +61,7 @@ else
     end
     for i = 1:numel(F)
         feat(:,:,(i-1)*fd+1:i*fd) = bsxfun(@gt,repmat(F{i},[1 1 fd]), reshape(config.thr,1,1,[]));
-    end    
+    end
 end
 
 F = double(reshape(cell2mat(F),size(F{1},1),size(F{1},2),[]));
