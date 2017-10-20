@@ -224,14 +224,14 @@ function [motion] = update_motion(motion, context)
 
     if (~isfield(motion, 'mexopencv'))
         try
-            corners = cv.cornerHarris(gray2, 'KSize', 1); % OpenCV 2.4 : AppertureSize
+            corners = cv.cornerHarris(gray2, 'KSize', 1); % OpenCV 2.4 : ApertureSize
             motion.mexopencv = 3;
         catch
-            corners = cv.cornerHarris(gray2, 'AppertureSize', 1);
+            corners = cv.cornerHarris(gray2, 'ApertureSize', 1);
             motion.mexopencv = 2;
         end
     elseif motion.mexopencv == 2
-        corners = cv.cornerHarris(gray2, 'AppertureSize', 1);
+        corners = cv.cornerHarris(gray2, 'ApertureSize', 1);
     else
         corners = cv.cornerHarris(gray2, 'KSize', 1);
     end
