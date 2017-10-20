@@ -37,7 +37,7 @@ try
 		elseif isa(image,'uint8')
 			I = image;
 		elseif isstruct(image)
-			I = cv.imdecode(image.data, 'Color', true);
+			I = cv.imdecode(image.data, 'Flags', 1);
 		else
 			error('Invalid image type');
 		end;
